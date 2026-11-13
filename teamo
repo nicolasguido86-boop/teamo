@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Para ti, amor</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=Caveat:wght@500&display=swap">
+<style>
+:root{color-scheme:light;--ink:#b03a68;--rose:#e58fb0;--stem:#3f8a62;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html,body{height:100%;margin:0}
+body{background:linear-gradient(180deg,#ffe6ee 0%,#ffcfdd 100%);overflow:hidden;position:relative;font-family:"Cormorant Garamond",Georgia,serif}
+#phrase{position:absolute;top:7%;left:0;right:0;padding:0 7%;text-align:center;color:var(--ink);font-style:italic;font-weight:500;font-size:clamp(32px,9.5vw,54px);line-height:1.2;min-height:1.3em;text-shadow:0 2px 14px rgba(255,255,255,.9)}
+svg{position:absolute;left:0;bottom:0;width:100%;height:66%}
+.stem{fill:none;stroke:var(--stem);stroke-width:5;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:grow 1.8s ease-out forwards}
+.leaf,.bud{fill:#58a577;stroke:#3a7a53;stroke-width:.8;transform:scale(0);transform-origin:0 0;animation:pop .9s ease-out forwards}
+.bud{fill:#f7d9e2;stroke:var(--rose)}
+.vein{fill:none;stroke:#3a7a53;stroke-width:.7;opacity:.6}
+.petal{transform:rotate(var(--a)) scale(0);transform-origin:0 0;animation:open 1.5s cubic-bezier(.2,.8,.3,1) forwards}
+.pt{fill:url(#pg);stroke:var(--rose);stroke-width:.9}
+.mid{fill:none;stroke:#f0a6c0;stroke-width:1.1;opacity:.85}
+.sp{fill:#c0457a;opacity:.75}
+.sta{opacity:0;animation:fade .8s ease forwards}
+.heart{position:absolute;bottom:-6%;color:#ff8fb3;opacity:0;animation:rise var(--d) linear var(--s) infinite;pointer-events:none}
+#env{position:absolute;left:50%;bottom:3%;transform:translateX(-50%);z-index:5;border:0;background:none;padding:0;cursor:pointer;opacity:0;pointer-events:none;transition:opacity 1s;font-family:"Caveat",cursive;color:var(--ink);font-size:22px;text-align:center}
+#env.show{opacity:1;pointer-events:auto}
+.e{position:relative;width:132px;height:90px;margin:0 auto 4px;background:#fff7f9;border:2px solid var(--rose);border-radius:8px;box-shadow:0 8px 20px rgba(176,58,104,.25);animation:bob 2.6s ease-in-out infinite}
+.e::before{content:"";position:absolute;left:-2px;top:-2px;border-left:68px solid transparent;border-right:68px solid transparent;border-top:50px solid #ffe0e9;filter:drop-shadow(0 1px 0 var(--rose))}
+.e span{position:absolute;left:50%;top:30px;transform:translateX(-50%);font-size:24px}
+#ov{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;background:rgba(176,58,104,.35);padding:16px;box-sizing:border-box}
+#ov[hidden]{display:none}
+#card{position:relative;background:#fffaf5;color:#5a2a3c;width:100%;max-width:520px;max-height:86%;overflow-y:auto;border-radius:14px;padding:30px 24px 24px;box-sizing:border-box;box-shadow:0 20px 50px rgba(90,42,60,.35);font-family:"Caveat",cursive;font-size:23px;line-height:1.38;white-space:pre-line;animation:card .6s cubic-bezier(.2,.8,.3,1)}
+#x{position:sticky;top:0;float:right;margin:-18px -12px 0 0;border:0;background:none;font-size:30px;color:var(--ink);cursor:pointer;line-height:1}
+#env:focus-visible,#x:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+@keyframes grow{to{stroke-dashoffset:0}}
+@keyframes pop{to{transform:scale(1)}}
+@keyframes open{to{transform:rotate(var(--a)) scale(1)}}
+@keyframes fade{to{opacity:1}}
+@keyframes rise{0%{transform:translateY(0);opacity:0}15%{opacity:.75}100%{transform:translateY(-105vh);opacity:0}}
+@keyframes bob{50%{transform:translateY(-6px)}}
+@keyframes card{from{transform:scale(.85) translateY(20px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.stem,.leaf,.bud,.petal,.sta{animation-duration:.01s;animation-delay:0s!important}.heart{display:none}.e,#card{animation:none}}
+#mus{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:12px;z-index:6;width:44px;height:44px;border-radius:50%;border:2px solid var(--rose);background:#fff7f9;font-size:20px;cursor:pointer;box-shadow:0 4px 12px rgba(176,58,104,.2)}
+#mus.off{opacity:.55}
+</style>
+</head>
+<body>
+<audio id="song" src="309.mp3" loop preload="auto"></audio>
+<button id="mus" class="off" type="button" aria-label="Música">🎵</button>
+<div id="phrase" aria-live="polite"></div>
+<svg id="garden" viewBox="0 0 400 460" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+<defs><linearGradient id="pg" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#cfe3a0"/><stop offset=".2" stop-color="#ffc6d8"/><stop offset=".6" stop-color="#ffeaf1"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs>
+</svg>
+<button id="env" type="button" aria-label="Abrir la carta"><div class="e"><span>💗</span></div>Ábrela, amor</button>
+<div id="ov" hidden role="dialog" aria-modal="true" aria-label="Carta"><div id="card"><button id="x" type="button" aria-label="Cerrar">×</button><span id="txt"></span></div></div>
+<script>
+// ✏️ FRASE Y CARTA
+var PHRASE = "Te amo mucho, amor";
+var LETTER = "Mi amor:\n\nHoy quería hacerte algo diferente. Como soy pésimo con las cartas, decidí hacerte algo que me gusta más y que me sale mejor… por eso te hice una carta en programación. 💻\n\nCapaz no soy bueno con las palabras, pero la vez pasada me preguntaste: ¿por qué me amas? Te amo porque te preocupas por mí, porque me gusta tu forma de ser y tu forma de ayudar a los demás. Amo tu cabello, tus ojos, tus manos que siempre termino pintando con plumones, y muchísimas cosas más, mi niña. Te amo muxoxoxoxo.\n\nTu sonrisa siempre me alegra el día. Cuando hablamos, siempre me alegras, amor.\n\nEstoy súper mega híper enamorado de ti, mi vida. Aunque a veces estemos ocupados, siempre nos tomamos un tiempito los dos para hablar en la noche.\n\nTe amo mucho, mi niña preciosa.\n\nTe amo, Maca 💗";
+
+var NS="http://www.w3.org/2000/svg", g=document.getElementById("garden");
+function el(n,a,p){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);(p||g).appendChild(e);return e}
+function rnd(a,b){return a+Math.random()*(b-a)}
+
+function petal(f,a,w,L,d){
+  var p=el("g",{class:"petal",style:"--a:"+a+"deg;animation-delay:"+d+"s"},f);
+  el("path",{class:"pt",d:"M0 0C-"+w*.8+" -"+L*.2+" -"+w+" -"+L*.62+" -2 -"+L+"Q1 -"+(L+6)+" 4 -"+(L-2)+"C"+w+" -"+L*.62+" "+w*.8+" -"+L*.2+" 0 0Z"},p);
+  el("path",{class:"mid",d:"M0 -4Q1 -"+L*.45+" 1 -"+L*.88},p);
+  for(var i=0;i<9;i++)el("circle",{class:"sp",cx:rnd(-w*.35,w*.35),cy:-rnd(L*.12,L*.62),r:rnd(.8,1.5)},p);
+}
+function flower(x,y,s,d,tilt){
+  var f=el("g",{transform:"translate("+x+","+y+") rotate("+tilt+") scale("+s+")"});
+  [0,120,240].forEach(function(a,i){petal(f,a,15,84,d+1.4+i*.15)});
+  [60,180,300].forEach(function(a,i){petal(f,a,25,78,d+1.9+i*.15)});
+  for(var i=0;i<6;i++){
+    var a=(20+i*60)*Math.PI/180,ex=Math.sin(a)*40,ey=-Math.cos(a)*40,t="animation-delay:"+(d+2.6+i*.08)+"s";
+    var h=el("g",{class:"sta",style:t},f);
+    el("path",{d:"M0 0Q"+ex*.3+" "+ey*.7+" "+ex+" "+ey,fill:"none",stroke:"#f4f0c8","stroke-width":1.6,"stroke-linecap":"round"},h);
+    el("ellipse",{cx:ex,cy:ey,rx:6.5,ry:2.6,fill:"#a8512a",transform:"rotate("+((20+i*60)-90)+" "+ex+" "+ey+")"},h);
+  }
+  var pi=el("g",{class:"sta",style:"animation-delay:"+(d+3.1)+"s"},f);
+  el("path",{d:"M0 0Q4 -26 7 -54",fill:"none",stroke:"#dfe59a","stroke-width":2.2,"stroke-linecap":"round"},pi);
+  el("circle",{cx:7,cy:-55,r:3.4,fill:"#cfd97a"},pi);
+}
+// base x, flor x, flor y, escala, retraso, inclinación
+[[92,102,258,.66,.2,-8],[200,200,172,.8,.8,3],[308,298,268,.62,1.4,9]].forEach(function(l,i){
+  var bx=l[0],x=l[1],y=l[2],s=l[3],d=l[4],cx=bx+(x-bx)*1.5,cy=(470+y)/2;
+  el("path",{d:"M"+bx+" 470Q"+cx+" "+cy+" "+x+" "+y,pathLength:1,class:"stem",style:"animation-delay:"+d+"s"});
+  function P(t){return[(1-t)*(1-t)*bx+2*(1-t)*t*cx+t*t*x,(1-t)*(1-t)*470+2*(1-t)*t*cy+t*t*y]}
+  [[.18,-35],[.34,215],[.5,-30]].forEach(function(q,k){
+    var p=P(q[0]),lg=el("g",{transform:"translate("+p[0]+","+p[1]+") rotate("+q[1]+")"});
+    el("path",{class:"leaf",d:"M0 0C14 -9 40 -8 66 0C40 8 14 9 0 0Z",style:"animation-delay:"+(d+.9+k*.25)+"s"},lg);
+    el("path",{class:"vein",d:"M0 0L60 0"},lg);
+  });
+  var b=P(.66),dir=i==1?-1:(i==0?-1:1),bg=el("g",{transform:"translate("+b[0]+","+b[1]+") rotate("+(dir*38)+")"});
+  el("path",{d:"M0 0L0 -16",stroke:"#3f8a62","stroke-width":2.4,"stroke-linecap":"round",fill:"none"},bg);
+  var bb=el("g",{transform:"translate(0,-16)"},bg);
+  el("path",{class:"bud",d:"M0 0C-8 -12 -7 -30 0 -44C7 -30 8 -12 0 0Z",style:"animation-delay:"+(d+1.3)+"s"},bb);
+  flower(x,y,s,d,l[5]);
+});
+
+for(var i=0;i<16;i++){
+  var h=document.createElement("div");h.className="heart";h.textContent="♥";
+  h.style.left=rnd(2,96)+"%";h.style.fontSize=rnd(10,22)+"px";
+  h.style.setProperty("--d",rnd(9,16)+"s");h.style.setProperty("--s",rnd(0,10)+"s");
+  document.body.appendChild(h);
+}
+
+var out=document.getElementById("phrase"),n=0,env=document.getElementById("env");
+setTimeout(function t(){
+  out.textContent=PHRASE.slice(0,++n);
+  if(n<PHRASE.length)setTimeout(t,90);else setTimeout(function(){env.classList.add("show")},700);
+},5000);
+
+var song=document.getElementById("song"),mus=document.getElementById("mus");
+function play(){var p=song.play();if(p&&p.then)p.then(function(){mus.classList.remove("off")}).catch(function(){})}
+mus.onclick=function(){if(song.paused)play();else{song.pause();mus.classList.add("off")}};
+var ov=document.getElementById("ov");
+env.onclick=function(){if(song.paused)play();document.getElementById("txt").textContent=LETTER;ov.hidden=false;document.getElementById("card").scrollTop=0};
+document.getElementById("x").onclick=function(){ov.hidden=true};
+ov.onclick=function(e){if(e.target===ov)ov.hidden=true};
+</script>
+</body>
+</html>
